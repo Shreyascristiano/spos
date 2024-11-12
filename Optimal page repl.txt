@@ -1,0 +1,115 @@
+import java.util.*;
+
+//LESSGOOOOOOOOOOOOOOOO
+/*
+    OPTIMAL PAGE REPLACEMENT - the page rep depends upon the page that will be used the farthest in the future
+* */
+public class Main {
+
+    static int getFarthestPageIndex(LinkedList<Integer> frames, int[] pages, int startIdx) {
+        int farthest = startIdx;
+        int farthestElementIndex = -1 ;
+        int j=0;
+        for(int i =0; i< frames.size();i++){
+            //get the current frame
+            int frame = frames.get(i);
+            for(j = startIdx ; j<pages.length;j++){
+                if(pages[j] == frame){
+                    //only swap if j>farthest e.g. farthest = 10 , j =4 ; dont change
+                    if(j>farthest) {
+                        farthest = j;
+                        farthestElementIndex = i;
+                    }
+                    break;
+                }
+            }
+            if(j==pages.length){
+                //if we traversed the entire array & didnt find a match, that means ele is not present in future.
+                //return its index
+                return frames.indexOf(frame);
+            }
+        }
+        //return 0 if all 3 elements are not used in the future
+        return (farthestElementIndex==-1) ? 0 : farthestElementIndex;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner z = new Scanner(System.in);
+        System.out.println("HELLO mom");
+        int numOfFrames, numberOfPages;
+        System.out.println("Enter num of frames");
+        numOfFrames = z.nextInt();
+        System.out.println("Enter num of pages");
+        numberOfPages = z.nextInt();
+        int[] pages = new int[numberOfPages];
+        System.out.println("Enter page num one by one");
+        for (int i = 0; i < pages.length; i++) {
+            int page = z.nextInt();
+            pages[i] = page;
+        }
+
+        //frames
+        LinkedList<Integer> frames = new LinkedList<>();
+        int pageFault = 0;
+
+        for (int i = 0; i < pages.length; i++) {
+            int page = pages[i];
+            if (!frames.contains(page)) {
+                //if space available add
+                if (frames.size() < 3) {
+                    frames.addLast(page);
+                } else {
+                    //get the index of ele that can be removed
+                    int index = getFarthestPageIndex(frames,pages,i);
+                    frames.remove(index);
+                    frames.add(index, page);
+                }
+                pageFault++;
+            }
+            printLinkedList(frames);
+        }
+
+        System.out.println("Page faults are: " + pageFault);
+
+
+    }
+    private static void printLinkedList(LinkedList<Integer> frames) {
+        System.out.print("Frames: ");
+        for(int i : frames){
+            System.out.print(i+" ");
+        }
+        System.out.println();
+    }
+
+}
+/*
+Sample IP & OP-
+HELLO mom
+Enter num of frames
+3
+Enter num of pages
+10
+Enter page num one by one
+7
+0
+1
+2
+0
+3
+0
+4
+2
+3
+Frames: 7 
+Frames: 7 0 
+Frames: 7 0 1 
+Frames: 2 0 1 
+Frames: 2 0 1 
+Frames: 2 0 3 
+Frames: 2 0 3 
+Frames: 2 4 3 
+Frames: 2 4 3 
+Frames: 2 4 3 
+Page faults are: 6
+ */

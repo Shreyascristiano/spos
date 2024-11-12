@@ -1,0 +1,51 @@
+import java.util.*;
+//THEY DONT KNOW YOU SON!
+/*
+    LRU PAGE REPLACEMENT
+ */
+public class Main {
+
+    static void printFrames(LinkedList<Integer> frame){
+        System.out.print("Frames- ");
+        for(int i : frame){
+            System.out.print(i+" ");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner z = new Scanner(System.in);
+        System.out.println("HELLO mom");
+        int numOfFrames,numberOfPages;
+        System.out.println("Enter num of frames");
+        numOfFrames = z.nextInt();
+        System.out.println("Enter num of pages");
+        numberOfPages = z.nextInt();
+        int[] pages = new int[numberOfPages];
+        System.out.println("Enter page num one by one");
+        for(int i =0 ; i<pages.length;i++){
+            int page = z.nextInt();
+            pages[i] = page;
+        }
+
+        LinkedList<Integer> frames = new LinkedList<>();
+        int pageFault =0;
+        for(int page : pages){
+            if(!frames.contains(page)){
+                if(frames.size()>=numOfFrames){
+                    frames.removeFirst();
+                }
+                frames.addLast(page);
+                pageFault++;
+            }else{
+                frames.remove(frames.indexOf(page));
+                frames.addLast(page);
+            }
+            printFrames(frames);
+        }
+
+        System.out.println("Page faults : "+ pageFault);
+
+
+    }
+}
